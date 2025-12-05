@@ -43,7 +43,7 @@ public class ReservationService {
         break;
     case SMS :
         SmsSender smsSender = new SmsSender();
-        smsSender.sendSmsMessage(res.customer.phoneNumber, "Your reservation confirmed!"); 
+        smsSender.sendSmsMessage(res.customer.mobile, "Your reservation confirmed!"); 
         break;
         
     default:
