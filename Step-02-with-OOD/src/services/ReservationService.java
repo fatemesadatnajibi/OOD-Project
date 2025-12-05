@@ -25,9 +25,6 @@ public class ReservationService {
             case CASH:
                 paymentProcessor.payByCash(res.totalPrice());
                 break;
-            case ONSITE: 
-                paymentProcessor.onSitePayment(res.totalPrice());
-                break;
         }
 
         System.out.println("----- INVOICE -----");
@@ -37,17 +34,12 @@ public class ReservationService {
         System.out.println("-------------------");
 
        switch (this.notifier){
-    case EMAIL :
-        EmailSender emailSender = new EmailSender();
-        emailSender.sendEmail(res.customer.email, "Your reservation confirmed!");
-        break;
-    case SMS :
-        SmsSender smsSender = new SmsSender();
-        smsSender.sendSmsMessage(res.customer.mobile, "Your reservation confirmed!"); 
-        break;
-        
-    default:
-        System.out.println("There is no Message Provider");
-}
+           case EMAIL :
+           EmailSender emailSender = new EmailSender();
+           emailSender.sendEmail(res.customer.email, "Your reservation confirmed!");
+           break;
+           default:
+               System.out.println("There is no Message Provider");
+       }
     }
 }
