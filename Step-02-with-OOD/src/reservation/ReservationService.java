@@ -1,4 +1,4 @@
-package services;
+/*package reservation;
 
 import constants.Notifier;
 import constants.PaymentMethods;
@@ -42,4 +42,33 @@ public class ReservationService {
                System.out.println("There is no Message Provider");
        }
     }
+}*/
+package reservation;
+
+
+import payment.PaymentMethod;
+import notification.Notifier;
+
+
+public final class ReservationService {
+private final PaymentMethod paymentMethod;
+private final Notifier notifier;
+
+
+public ReservationService(PaymentMethod paymentMethod, Notifier notifier) {
+this.paymentMethod = paymentMethod;
+this.notifier = notifier;
+}
+
+
+public void makeReservation(Reservation reservation) {
+double total = reservation.calculateTotal();
+paymentMethod.pay(total);
+
+
+notifier.send(reservation.getCustomer().getEmail(), reservation.summary());
+
+
+System.out.println("[ReservationService] Reservation completed.");
+}
 }
