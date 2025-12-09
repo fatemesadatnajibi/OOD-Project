@@ -1,4 +1,4 @@
-package models;
+/*package models;
 
 public class Room {
     public String number;
@@ -10,4 +10,21 @@ public class Room {
         this.type = type;
         this.price = price;
     }
+}*/
+package models;
+
+
+public class Room {
+protected final String roomNumber;
+protected final double pricePerNight;
+
+
+public Room(String roomNumber, double pricePerNight) {
+this.roomNumber = roomNumber;
+this.pricePerNight = pricePerNight;
+}
+
+
+public String getRoomNumber() { return roomNumber; }
+public double getPricePerNight() { return pricePerNight; }
 }
