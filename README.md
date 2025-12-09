@@ -37,3 +37,20 @@
 |  | مورد نقض | ReservationService | از زنجیره تماس‌های طولانی استفاده می‌کند، یعنی به ساختار داخلی آبجکت‌ها نفوذ کرده و با وابستگان غیرمستقیم خود تعامل می‌کند. بنابراین این مورد را نقض می‌کند.
 | **CRP** | مورد برقراری | Customer | همیشه همراه مدل‌های دیگر استفاده می‌شود و چرخهٔ تغییرش با Room/Reservation هم‌راستا است.
 |  | مورد نقض | ReservationService | در یک پکیج مشترک با PaymentProcessor و EmailSender قرار گرفته ولی چرخه تغییرشان مشترک نیست و همیشه باهم استفده نمی‌شوند. بنابراین وجودشان در پکیج service خلاف CRP است.
+
+
+گام سوم : اصلاح موارد نقض
+=======
+
+| اصل | نقض در گام ۲ | تغییرات انجام‌شده برای رفع نقض در گام ۳ |
+|------|-------------|-------------------------------------------|
+| **SRP** | ReservationService چند مسئولیت داشت (پرداخت، پیام، رزرو)؛ PaymentProcessor و MessageSender نیز چندوظیفه‌ای بودند | - جدا کردن مسئولیت‌ها در چند کلاس مستقل  <br> - حذف کامل PaymentProcessor  <br> - ایجاد EmailNotifier و SmsNotifier مستقل  <br> - ReservationService فقط مسئول رزرو است |
+| **OCP** | PaymentProcessor برای هر روش پرداخت جدید باید تغییر می‌کرد (if / switch) | - ایجاد interface به نام PaymentMethod <br> - ساخت کلاس‌های مستقل: PaypalPayment، CreditCardPayment، OnSitePayment <br> - حذف تمام ساختارهای شرطی پرداخت |
+| **LSP** | ReservationService و PaymentProcessor رفتار قابل‌جایگزینی نداشتند | - حذف PaymentProcessor (طراحی اشتباه) <br> - final کردن ReservationService <br> - جایگزینی رفتارها با interfaceها و تزریق وابستگی |
+| **ISP** | وجود interface/کلاس بزرگ مانند PaymentProcessor با چندین متد غیرمرتبط | - ساخت دو interface کوچک و تخصصی: PaymentMethod و Notifier <br> - هر کلاس فقط یک متد لازم را پیاده‌سازی می‌کند |
+| **DIP** | ReservationService مستقیم به کلاس‌های concrete وابسته بود (مثل EmailSender یا PaymentProcessor) | - تزریق وابستگی از طریق سازنده (Constructor Injection) <br> - وابستگی به abstraction (PaymentMethod, Notifier) <br> - ReservationService دیگر هیچ کلاس concrete را new نمی‌کند |
+| **PLK** | وجود زنجیره تماس‌های طولانی در ReservationService مانند room.getPrice().get… | - افزودن متدهای calculateTotal() و summary() در Reservation <br> - عدم دسترسی ReservationService به ساختار داخلی مدل‌ها |
+| **CRP** | قرار گرفتن کلاس‌هایی با چرخه تغییر متفاوت در یک پکیج مشترک (services) | - تقسیم پروژه به پکیج‌های مجزا: payment ،notification ،reservation ،models <br> - هر پکیج فقط کلاس‌های با چرخه تغییر مشترک را نگه می‌دارد |
+
+
+
