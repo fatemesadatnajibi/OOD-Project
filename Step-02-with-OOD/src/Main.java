@@ -24,11 +24,10 @@ import models.Room;
 import models.LuxuryRoom;
 import reservation.Reservation;
 import reservation.ReservationService;
-import payment.OnSitePayment;
+import payment.CashPayment;
 import payment.PaypalPayment;
 import payment.PaymentMethod;
 import notification.EmailNotifier;
-import notification.SmsNotifier;
 import notification.Notifier;
 
 
@@ -46,11 +45,13 @@ service1.makeReservation(res);
 
 
 System.out.println();
+ReservationService service3 = new ReservationService(
+        new CashPayment(),
+        new EmailNotifier()
+);
+
+service3.makeReservation(res);
 
 
-PaymentMethod pm2 = new OnSitePayment();
-Notifier notifier2 = new SmsNotifier();
-ReservationService service2 = new ReservationService(pm2, notifier2);
-service2.makeReservation(res);
 }
 }
